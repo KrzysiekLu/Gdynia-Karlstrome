@@ -96,6 +96,41 @@ footer{padding:20px 0 40px;color:var(--muted);font-size:.85rem}
 .tab:focus-visible{outline:3px solid var(--sea);outline-offset:-3px}
 .tabpanel[hidden]{display:none}
 .tabpanel{padding-top:8px}
+/* przypięta oś czasu po lewej */
+.shell{display:grid;grid-template-columns:230px minmax(0,1fr);gap:28px;align-items:start;padding-top:16px}
+.shell.norail{grid-template-columns:minmax(0,1fr)}
+.shell.norail .rail{display:none}
+.rail{position:sticky;top:calc(var(--tabs-h,48px) + 12px);max-height:calc(100vh - var(--tabs-h,48px) - 28px);overflow:auto;padding:4px 0 4px 2px;scrollbar-width:thin}
+.rail:before{content:"";position:absolute;left:41px;top:12px;bottom:12px;width:3px;background:var(--line)}
+.rl{position:relative;display:grid;grid-template-columns:38px 1fr;gap:0 16px;align-items:start;padding:6px 6px 6px 0;text-decoration:none;color:var(--muted);font-size:.86rem;line-height:1.3}
+.rl .rt{font-weight:700;font-variant-numeric:tabular-nums;text-align:right;font-size:.8rem;color:var(--muted)}
+.rl .rn{padding-left:8px;position:relative}
+.rl .rn:before{content:"";position:absolute;left:-13px;top:4px;width:11px;height:11px;border-radius:50%;background:var(--surface);border:3px solid var(--sea)}
+.rl.alt .rn{opacity:.75;font-style:italic}
+.rl.alt .rn:before{border-style:dashed}
+.rl.on{color:var(--text);font-weight:700}
+.rl.on .rt{color:var(--buoy)}
+.rl.on .rn:before{background:var(--buoy);border-color:var(--buoy)}
+.rl:hover .rn{color:var(--text)}
+.rl:focus-visible{outline:3px solid var(--sea);outline-offset:2px;border-radius:6px}
+.ev{scroll-margin-top:calc(var(--tabs-h,48px) + 76px)}
+@media (max-width:980px){
+  .shell{grid-template-columns:minmax(0,1fr);gap:0;padding-top:0}
+  .rail{top:var(--tabs-h,48px);z-index:4;display:flex;gap:6px;max-height:none;overflow-x:auto;overflow-y:hidden;margin:0 -16px;padding:8px 16px;background:var(--bg);border-bottom:1px solid var(--line)}
+  .rail:before{display:none}
+  .rl{display:flex;flex:0 0 auto;gap:6px;align-items:center;padding:5px 12px;border:1px solid var(--line);border-radius:99px;background:var(--surface);white-space:nowrap}
+  .rl .rn{padding-left:0;max-width:11rem;overflow:hidden;text-overflow:ellipsis}
+  .rl .rn:before{display:none}
+  .rl .rt{text-align:left}
+  .rl.on{background:var(--buoy);border-color:var(--buoy);color:var(--buoy-ink)}
+  .rl.on .rt{color:var(--buoy-ink)}
+}
+.foods{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.food .pic{margin:-14px -16px 10px;border-radius:10px 10px 0 0;overflow:hidden;display:block}
+.food .pic img{height:150px}
+.food h3{text-transform:none;letter-spacing:0;font-size:1.05rem;color:var(--text);margin:0 0 6px}
+.food .meta{margin-top:8px}
+@media (max-width:700px){.foods{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -108,9 +143,11 @@ footer{padding:20px 0 40px;color:var(--muted);font-size:.85rem}
 <nav class="tabs" aria-label="Dni wyjazdu"><div class="wrap" role="tablist">
   <button id="btn-gdynia" role="tab" aria-selected="true" aria-controls="tab-gdynia" class="tab">Gdynia, niedziela 25.10</button>
   <button id="btn-karlskrona" role="tab" aria-selected="false" aria-controls="tab-karlskrona" class="tab">Karlskrona, poniedziałek 26.10</button>
+  <button id="btn-jedzenie" role="tab" aria-selected="false" aria-controls="tab-jedzenie" class="tab">Szwedzkie jedzenie</button>
 </div></nav>
 
 <main class="wrap">
+<div class="shell" id="shell"><aside class="rail" id="rail" aria-label="Oś czasu dnia"></aside><div class="content">
 <div id="tab-gdynia" class="tabpanel" role="tabpanel" aria-labelledby="btn-gdynia">
   <div class="layout">
     <section aria-labelledby="plan" style="margin-top:0">
@@ -335,12 +372,151 @@ footer{padding:20px 0 40px;color:var(--muted);font-size:.85rem}
   </section>
 </div>
 
+<div id="tab-jedzenie" class="tabpanel" role="tabpanel" aria-labelledby="btn-jedzenie" hidden>
+  <section aria-labelledby="jedz-klasyki" style="margin-top:0">
+    <h2 id="jedz-klasyki">Szwedzkie klasyki</h2>
+    <div class="foods">
+          <div class="card food"><a class="pic" href="https://commons.wikimedia.org/wiki/File:Kanelbulle.jpg" target="_blank" rel="noopener"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Kanelbulle.jpg?width=640" alt="Kanelbulle, szwedzka bułka cynamonowa" loading="lazy" onerror="this.parentNode.style.display='none'"></a>
+            <h3>Kanelbulle (bułka cynamonowa)</h3>
+            <p>Miękka bułka z cynamonem i kardamonem, cukrem i masłem. Je się ją do kawy podczas fika.</p>
+            <p class="info"><strong>Gdzie:</strong> Systrarna Lindqvist (Borgmästaregatan 3, bułki cynamonowe i kardamonowe), Lennarths konditori, Gylles Konditori.</p>
+            <p class="warn">Godzin w poniedziałek nie znalazłem, więc sprawdź w Google Maps.</p>
+            <div class="meta"><a class="go" href="https://www.google.com/maps/dir/?api=1&destination=Systrarna%20Lindqvist%20Caf%C3%A9%20Borgm%C3%A4staregatan%203%20Karlskrona&travelmode=walking" target="_blank" rel="noopener">Prowadź: Systrarna Lindqvist</a><a class="go" href="https://www.google.com/maps/dir/?api=1&destination=Lennarths%20konditori%20Karlskrona&travelmode=walking" target="_blank" rel="noopener">Lennarths</a><a class="go" href="https://www.google.com/maps/dir/?api=1&destination=Gylles%20Konditori%20Karlskrona&travelmode=walking" target="_blank" rel="noopener">Gylles</a></div></div>
+          <div class="card food"><a class="pic" href="https://commons.wikimedia.org/wiki/File:K%C3%B6ttbullar_-_Swedish_meatballs.jpg" target="_blank" rel="noopener"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/K%C3%B6ttbullar_-_Swedish_meatballs.jpg?width=640" alt="Köttbullar, szwedzkie klopsiki" loading="lazy" onerror="this.parentNode.style.display='none'"></a>
+            <h3>Köttbullar (klopsiki)</h3>
+            <p>Małe smażone klopsiki z puree, sosem, żurawiną i ogórkiem kiszonym. Codzienne domowe danie.</p>
+            <p class="info"><strong>Gdzie:</strong> Bistro Skeppsgossen (na Stumholmen, klopsiki serwują w weekendy). W centrum możesz zapytać w Konserthuset Stora Buffé (Stortorget 18), ale nie wiem, co dokładnie podają.</p>
+            <p class="warn">Bistro Skeppsgossen jest według oficjalnej strony czynne wt–nd 11:00–14:00, więc w poniedziałek 26.10 może być zamknięte (chyba że muzeum otwiera się w ferie szkolne, czego nie potwierdziłem). Zadzwoń: 0455-60 61 62.</p>
+            <div class="meta"><a class="go" href="https://www.google.com/maps/dir/?api=1&destination=Bistro%20Skeppsgossen%20Karlskrona&travelmode=walking" target="_blank" rel="noopener">Prowadź: Skeppsgossen</a><a class="go" href="https://www.google.com/maps/dir/?api=1&destination=Konserthuset%20Stora%20Buff%C3%A9%20Stortorget%2018%20Karlskrona&travelmode=walking" target="_blank" rel="noopener">Stora Buffé</a></div></div>
+          <div class="card food"><a class="pic" href="https://commons.wikimedia.org/wiki/File:Prinsesst%C3%A5rta.JPG" target="_blank" rel="noopener"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Prinsesst%C3%A5rta.JPG?width=640" alt="Prinsesstårta, tort księżniczki" loading="lazy" onerror="this.parentNode.style.display='none'"></a>
+            <h3>Prinsesstårta (tort księżniczki)</h3>
+            <p>Biszkopt, krem budyniowy i bita śmietana pod zielonym marcepanem, z różową różą. Popularny od lat 20. XX wieku.</p>
+            <p class="info"><strong>Gdzie:</strong> Piekarnie i kawiarnie, np. Lennarths konditori i Gylles Konditori (nie mam potwierdzenia, że akurat mają go w ofercie).</p>
+            <p class="warn">Zapytaj o kawałek na miejscu.</p>
+            <div class="meta"><a class="go" href="https://www.google.com/maps/dir/?api=1&destination=Lennarths%20konditori%20Karlskrona&travelmode=walking" target="_blank" rel="noopener">Lennarths</a><a class="go" href="https://www.google.com/maps/dir/?api=1&destination=Gylles%20Konditori%20Karlskrona&travelmode=walking" target="_blank" rel="noopener">Gylles</a></div></div>
+          <div class="card food"><a class="pic" href="https://commons.wikimedia.org/wiki/File:Gravad_lax-01.jpg" target="_blank" rel="noopener"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Gravad_lax-01.jpg?width=640" alt="Gravad lax, łosoś peklowany" loading="lazy" onerror="this.parentNode.style.display='none'"></a>
+            <h3>Gravad lax</h3>
+            <p>Łosoś peklowany solą, cukrem i koprem, z sosem musztardowo-koperkowym.</p>
+            <p class="info"><strong>Gdzie:</strong> Blomlöfs na Saltö sprzedaje świeże i wędzone ryby oraz peklowanego i wędzonego łososia (źródła mówią o wędzonym i peklowanym łososiu, nie potwierdziłem gravad lax).</p>
+            <p class="warn">Godzin nie znam, a dane o Blomlöfs są sprzed kilku lat.</p>
+            <div class="meta"><a class="go" href="https://www.google.com/maps/dir/?api=1&destination=Bloml%C3%B6fs%20Salt%C3%B6%20Karlskrona&travelmode=walking" target="_blank" rel="noopener">Prowadź: Blomlöfs</a></div></div>
+          <div class="card food"><a class="pic" href="https://commons.wikimedia.org/wiki/File:Toast_Skagen_on_a_plate.jpg" target="_blank" rel="noopener"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Toast_Skagen_on_a_plate.jpg?width=640" alt="Toast Skagen" loading="lazy" onerror="this.parentNode.style.display='none'"></a>
+            <h3>Toast Skagen</h3>
+            <p>Krewetki z majonezem i koprem na maślanym chlebie, zwykle przystawka w restauracji.</p>
+            <p class="info"><strong>Gdzie:</strong> Restauracje w centrum, np. Nivå Bar & Steakhouse (kuchnia z szwedzkim akcentem w jednym z najstarszych budynków restauracyjnych w Szwecji). Nie sprawdzałem menu.</p>
+            <div class="meta"><a class="go" href="https://www.google.com/maps/dir/?api=1&destination=Niv%C3%A5%20Bar%20%26%20Steakhouse%20Karlskrona&travelmode=walking" target="_blank" rel="noopener">Prowadź: Nivå</a></div></div>
+          </div>
+  </section>
+  <section aria-labelledby="jedz-reg">
+    <h2 id="jedz-reg">Z Blekinge</h2>
+    <div class="foods">
+          <div class="card food"><a class="pic" href="https://commons.wikimedia.org/wiki/File:Kroppkaka.jpg" target="_blank" rel="noopener"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Kroppkaka.jpg?width=640" alt="Kroppkakor, kluski ziemniaczane" loading="lazy" onerror="this.parentNode.style.display='none'"></a>
+            <h3>Kroppkakor (białe)</h3>
+            <p>Gotowane kluski ziemniaczane, typowe dla Blekinge. Według lokalnej książki kucharskiej bywają z grzybami albo z wieprzowiną, żurawiną i kapustą.</p>
+            <p class="info"><strong>Gdzie:</strong> Bistro Skeppsgossen (w muzeum Marinmuseum na Stumholmen): "Blekingebuffé" z białymi kroppkakor, raggmunkar i smażoną wieprzowiną.</p>
+            <p class="warn">Bistro Skeppsgossen jest według oficjalnej strony czynne wt–nd 11:00–14:00, więc w poniedziałek 26.10 może być zamknięte (chyba że muzeum otwiera się w ferie szkolne, czego nie potwierdziłem). Zadzwoń: 0455-60 61 62.</p>
+            <div class="meta"><a class="go" href="https://www.google.com/maps/dir/?api=1&destination=Bistro%20Skeppsgossen%20Karlskrona&travelmode=walking" target="_blank" rel="noopener">Prowadź: Skeppsgossen</a></div></div>
+          <div class="card food"><a class="pic" href="https://commons.wikimedia.org/wiki/File:Potato_pancakes.jpg" target="_blank" rel="noopener"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Potato_pancakes.jpg?width=640" alt="Placki ziemniaczane, podobne do raggmunkar" loading="lazy" onerror="this.parentNode.style.display='none'"></a>
+            <h3>Raggmunkar i inne specjały</h3>
+            <p>Raggmunkar to placki ziemniaczane. Ta sama książka wymienia też klådda, rålåpor i bulsa, ale znam tylko ich nazwy.</p>
+            <p class="info"><strong>Gdzie:</strong> Raggmunkar są w bufecie Blekinge w Bistro Skeppsgossen. Gdzie zjeść klådda, rålåpor i bulsa, nie znalazłem.</p>
+            <p class="warn">Zdjęcie ilustracyjne (zwykłe placki ziemniaczane).</p>
+            <div class="meta"><a class="go" href="https://www.google.com/maps/dir/?api=1&destination=Bistro%20Skeppsgossen%20Karlskrona&travelmode=walking" target="_blank" rel="noopener">Prowadź: Skeppsgossen</a></div></div>
+          <div class="card food"><a class="pic" href="https://commons.wikimedia.org/wiki/File:Isterband.jpg" target="_blank" rel="noopener"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Isterband.jpg?width=640" alt="Isterband, kiełbasa" loading="lazy" onerror="this.parentNode.style.display='none'"></a>
+            <h3>Isterband (kiełbasa)</h3>
+            <p>Klasyczna kiełbasa regionu, zwykle z ziemniakami. Jedna z lokalnych jadłospisów dnia podawała w poniedziałek småländska isterband z ziemniakami w koperku i buraczkami.</p>
+            <p class="info"><strong>Gdzie:</strong> Bistro Berna (poniedziałkowe menu z isterband, ale z agregatora z nieznanego tygodnia).</p>
+            <p class="warn">Menu zmieniają się co tydzień, więc sprawdź w lokalu.</p>
+            <div class="meta"><a class="go" href="https://www.google.com/maps/dir/?api=1&destination=Bistro%20Berna%20Karlskrona&travelmode=walking" target="_blank" rel="noopener">Prowadź: Bistro Berna</a></div></div>
+          <div class="card food"><a class="pic" href="https://commons.wikimedia.org/wiki/File:Smoked_salmon_20080814_120624.jpg" target="_blank" rel="noopener"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Smoked_salmon_20080814_120624.jpg?width=640" alt="Wędzony łosoś" loading="lazy" onerror="this.parentNode.style.display='none'"></a>
+            <h3>Wędzone ryby</h3>
+            <p>Wędzone ryby to specjalność Blekinge, szczególnie wędzony i peklowany łosoś.</p>
+            <p class="info"><strong>Gdzie:</strong> Blomlöfs na wyspie Saltö: sklep z rybą świeżą i wędzoną, serami i lokalnymi produktami.</p>
+            <p class="warn">Dane sprzed ok. 5 lat. Godzin nie znam.</p>
+            <div class="meta"><a class="go" href="https://www.google.com/maps/dir/?api=1&destination=Bloml%C3%B6fs%20Salt%C3%B6%20Karlskrona&travelmode=walking" target="_blank" rel="noopener">Prowadź: Blomlöfs</a></div></div>
+          <div class="card food"><a class="pic" href="https://commons.wikimedia.org/wiki/File:Vasterbottensost.jpg" target="_blank" rel="noopener"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Vasterbottensost.jpg?width=640" alt="Szwedzki ser (zdjęcie ilustracyjne)" loading="lazy" onerror="this.parentNode.style.display='none'"></a>
+            <h3>Ser z Orranäs</h3>
+            <p>Sery z lokalnej mleczarni gospodarskiej Orranäs są wymieniane jako coś do spróbowania.</p>
+            <p class="info"><strong>Gdzie:</strong> Blomlöfs sprzedaje sery i lokalne produkty (nie wiem, czy akurat z Orranäs).</p>
+            <p class="warn">Zdjęcie ilustracyjne (ser Västerbotten, nie Orranäs).</p>
+            <div class="meta"><a class="go" href="https://www.google.com/maps/dir/?api=1&destination=Bloml%C3%B6fs%20Salt%C3%B6%20Karlskrona&travelmode=walking" target="_blank" rel="noopener">Prowadź: Blomlöfs</a></div></div>
+          </div>
+  </section>
+  <section aria-labelledby="jedz-szybko">
+    <h2 id="jedz-szybko">Na szybko, ze sklepu i kawiarni</h2>
+    <div class="foods">
+          <div class="card food"><a class="pic" href="https://commons.wikimedia.org/wiki/File:Sweets-Jamin-Store-2024.jpg" target="_blank" rel="noopener"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Sweets-Jamin-Store-2024.jpg?width=640" alt="Słodycze w sklepie" loading="lazy" onerror="this.parentNode.style.display='none'"></a>
+            <h3>Słodycze i pieczywo ze sklepu</h3>
+            <p>Lösgodis (słodycze na wagę), knäckebröd (pieczywo chrupkie), filmjölk (fermentowane mleko) i Kalles kaviar (pasta z ikry do kanapek). To ogólna wiedza o szwedzkich sklepach, asortymentu nie sprawdzałem.</p>
+            <p class="info"><strong>Gdzie:</strong> ICA Cityhallen (Arklimästaregatan 40, ok. 07–23) i Willys (Tullgatan 1, ok. 08–21). W poniedziałek sklepy działają.</p>
+            <p class="warn">Zdjęcie ilustracyjne (sklep ze słodyczami).</p>
+            <div class="meta"><a class="go" href="https://www.google.com/maps/dir/?api=1&destination=ICA%20Supermarket%20Cityhallen%20Arklim%C3%A4staregatan%2040%20Karlskrona&travelmode=walking" target="_blank" rel="noopener">Prowadź: ICA</a><a class="go" href="https://www.google.com/maps/dir/?api=1&destination=Willys%20Tullgatan%201%20Karlskrona&travelmode=walking" target="_blank" rel="noopener">Prowadź: Willys</a></div></div>
+          <div class="card food"><a class="pic" href="https://commons.wikimedia.org/wiki/File:Knaeckebroed.jpg" target="_blank" rel="noopener"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Knaeckebroed.jpg?width=640" alt="Knäckebröd, chrupkie pieczywo" loading="lazy" onerror="this.parentNode.style.display='none'"></a>
+            <h3>Knäckebröd</h3>
+            <p>Szwedzkie pieczywo chrupkie, dobre jako zapas w podróż. Kupisz w każdym supermarkecie.</p>
+            <p class="info"><strong>Gdzie:</strong> ICA Cityhallen lub Willys.</p>
+            <div class="meta"><a class="go" href="https://www.google.com/maps/dir/?api=1&destination=ICA%20Supermarket%20Cityhallen%20Arklim%C3%A4staregatan%2040%20Karlskrona&travelmode=walking" target="_blank" rel="noopener">Prowadź: ICA</a><a class="go" href="https://www.google.com/maps/dir/?api=1&destination=Willys%20Tullgatan%201%20Karlskrona&travelmode=walking" target="_blank" rel="noopener">Prowadź: Willys</a></div></div>
+          <div class="card food"><a class="pic" href="https://commons.wikimedia.org/wiki/File:Dark_chocolate_chip_ice_cream_cone_-_August_2025_-_Sarah_Stierch.jpg" target="_blank" rel="noopener"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Dark_chocolate_chip_ice_cream_cone_-_August_2025_-_Sarah_Stierch.jpg?width=640" alt="Lody w rożku (zdjęcie ilustracyjne)" loading="lazy" onerror="this.parentNode.style.display='none'"></a>
+            <h3>Lody</h3>
+            <p>Lodziarnia Glassiären, o której przewodniki piszą, że ma bardzo duże porcje. Alternatywą jest Café Gelato.</p>
+            <p class="info"><strong>Gdzie:</strong> Glassiären lub Café Gelato w centrum.</p>
+            <p class="warn">Godzin w październiku nie znam. Zdjęcie ilustracyjne.</p>
+            <div class="meta"><a class="go" href="https://www.google.com/maps/dir/?api=1&destination=Glassi%C3%A4ren%20Karlskrona&travelmode=walking" target="_blank" rel="noopener">Prowadź: Glassiären</a><a class="go" href="https://www.google.com/maps/dir/?api=1&destination=Caf%C3%A9%20Gelato%20Karlskrona&travelmode=walking" target="_blank" rel="noopener">Café Gelato</a></div></div>
+          <div class="card food"><a class="pic" href="https://commons.wikimedia.org/wiki/File:Coffee_grinder_positioned_in_a_cafe_with_freshly_roasted_beans_ready_for_brewing.jpg" target="_blank" rel="noopener"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Coffee_grinder_positioned_in_a_cafe_with_freshly_roasted_beans_ready_for_brewing.jpg?width=640" alt="Palona kawa i młynek (zdjęcie ilustracyjne)" loading="lazy" onerror="this.parentNode.style.display='none'"></a>
+            <h3>Kawa z lokalnej palarni</h3>
+            <p>Rosteri Skeppsgossen to palarnia kawy z Karlskrony.</p>
+            <p class="info"><strong>Gdzie:</strong> Palarnia lub kawiarnia w Karlskronie, lokalizacji w centrum nie sprawdzałem.</p>
+            <p class="warn">Zdjęcie ilustracyjne. Godzin nie znam.</p>
+            <div class="meta"><a class="go" href="https://www.google.com/maps/dir/?api=1&destination=Rosteri%20Skeppsgossen%20Karlskrona&travelmode=walking" target="_blank" rel="noopener">Prowadź: Rosteri</a></div></div>
+          </div>
+  </section>
+  <section>
+    <div class="note">
+      <strong>Uwaga:</strong> opisy klasyków pochodzą z Visit Sweden, dań z Blekinge z lokalnych przewodników i książki o regionie, a miejsca z katalogów i stron lokali. Nie sprawdzałem godzin otwarcia w poniedziałek ani cen, więc przed wyjściem sprawdź je w Google Maps.    </div>
+  </section>
+</div>
+</div></div>
 </main>
 
 <footer><div class="wrap">Zdjęcia: Wikimedia Commons (kliknij zdjęcie, by zobaczyć autora i licencję), parking: Google Street View. Strona statyczna, bez kluczy API. Nawigację i mapy obsługuje Google Maps.</div></footer>
 <script>
 (function(){
   var tabs=[].slice.call(document.querySelectorAll(".tab"));
+  var tabsBar=document.querySelector(".tabs"), rail=document.getElementById("rail"), shell=document.getElementById("shell");
+  var io=null;
+  function setH(){document.documentElement.style.setProperty("--tabs-h",(tabsBar?tabsBar.offsetHeight:48)+"px")}
+  window.addEventListener("resize",setH); setH();
+  function buildRail(panel){
+    if(io){io.disconnect();io=null}
+    rail.innerHTML="";
+    var evs=[].slice.call(panel.querySelectorAll(".timeline .ev"));
+    shell.classList.toggle("norail",evs.length===0);
+    var links=[];
+    evs.forEach(function(ev,i){
+      if(!ev.id) ev.id=panel.id+"-ev"+i;
+      var time=ev.querySelector(".time"), h=ev.querySelector("h3");
+      var a=document.createElement("a");
+      a.className="rl"+(time&&time.textContent.trim()==="alt."?" alt":"");
+      a.href="#"+ev.id;
+      var rt=document.createElement("span"); rt.className="rt"; rt.textContent=time?time.textContent.trim():"";
+      var rn=document.createElement("span"); rn.className="rn"; rn.textContent=h?h.textContent.trim():"";
+      a.appendChild(rt); a.appendChild(rn);
+      a.addEventListener("click",function(e){e.preventDefault();ev.scrollIntoView({behavior:"smooth",block:"start"})});
+      rail.appendChild(a); links.push(a);
+    });
+    if(!("IntersectionObserver" in window)||!evs.length) return;
+    var visible={};
+    io=new IntersectionObserver(function(entries){
+      entries.forEach(function(en){visible[en.target.id]=en.isIntersecting});
+      var first=evs.find(function(ev){return visible[ev.id]});
+      links.forEach(function(l,i){l.classList.toggle("on",!!first&&evs[i]===first)});
+      var on=rail.querySelector(".rl.on");
+      if(on&&on.scrollIntoView){
+        if(getComputedStyle(rail).display==="flex"){rail.scrollTo({left:on.offsetLeft-16,behavior:"smooth"})}
+      }
+    },{rootMargin:"-"+((tabsBar?tabsBar.offsetHeight:48)+90)+"px 0px -55% 0px"});
+    evs.forEach(function(ev){io.observe(ev)});
+  }
   function show(id){
     tabs.forEach(function(b){
       var on=b.getAttribute("aria-controls")===id;
@@ -348,9 +524,11 @@ footer{padding:20px 0 40px;color:var(--muted);font-size:.85rem}
       document.getElementById(b.getAttribute("aria-controls")).hidden=!on;
     });
     try{history.replaceState(null,"","#"+id.replace("tab-",""))}catch(e){}
+    buildRail(document.getElementById(id));
   }
   tabs.forEach(function(b){b.addEventListener("click",function(){show(b.getAttribute("aria-controls"));window.scrollTo(0,0)})});
-  show(location.hash==="#karlskrona"?"tab-karlskrona":"tab-gdynia");
+  var hs={"#karlskrona":"tab-karlskrona","#jedzenie":"tab-jedzenie"};
+  show(hs[location.hash]||"tab-gdynia");
 })();
 </script>
 </body>
