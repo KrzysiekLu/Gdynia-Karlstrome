@@ -1,0 +1,289 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gdynia przed promem</title>
+<meta name="color-scheme" content="light dark">
+<style>
+:root{
+  --bg:#f3f6f9; --surface:#ffffff; --surface2:#e8eef4; --text:#10233a; --muted:#52667d;
+  --navy:#0b2a4a; --sea:#1d5f8f; --buoy:#e8590c; --buoy-ink:#ffffff; --line:#c9d5e1;
+  --warn-bg:#fff1e5; --warn-text:#8a3a07; --time-bg:#0b2a4a; --time-text:#ffffff;
+  --tag-bg:#dcebf6; --tag-text:#0d4670; --shadow:0 1px 3px rgba(11,42,74,.12);
+}
+@media (prefers-color-scheme:dark){
+  :root{
+    --bg:#08141f; --surface:#102335; --surface2:#16304a; --text:#e6eef6; --muted:#9db2c6;
+    --navy:#05101a; --sea:#5fa8d6; --buoy:#ff8a3d; --buoy-ink:#1a0d03; --line:#26425c;
+    --warn-bg:#3a2210; --warn-text:#ffc9a0; --time-bg:#ff8a3d; --time-text:#1a0d03;
+    --tag-bg:#1b3d5a; --tag-text:#bfe0f5; --shadow:none;
+  }
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--text);font:16px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+a{color:var(--sea)}
+.wrap{max-width:1200px;margin:0 auto;padding:0 16px}
+header{background:var(--navy);color:#fff;padding:32px 0 28px;border-bottom:6px solid var(--buoy)}
+header h1{margin:0 0 6px;font-size:clamp(1.9rem,5vw,3rem);letter-spacing:-.02em;line-height:1.1}
+header p{margin:0;color:#c5d6e6;font-size:1.05rem}
+header .route{color:#fff;font-weight:600}
+h2{font-size:1.3rem;margin:0 0 14px;color:var(--text)}
+section{margin:28px 0}
+.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px 16px;box-shadow:var(--shadow)}
+.card h3{margin:0 0 6px;font-size:.78rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}
+.card p{margin:0;font-size:.95rem}
+.card.accent{background:var(--buoy);border-color:var(--buoy);color:var(--buoy-ink)}
+.card.accent h3{color:inherit;opacity:.85}
+.layout{max-width:760px;margin:0 auto}
+.side{position:sticky;top:12px;display:flex;flex-direction:column;gap:20px}
+/* oś czasu */
+.timeline{list-style:none;margin:0;padding:0;position:relative}
+.timeline:before{content:"";position:absolute;left:5.1rem;top:6px;bottom:6px;width:3px;background:var(--line)}
+.ev{display:grid;grid-template-columns:4.2rem 1fr;gap:0 1.7rem;position:relative;padding:0 0 18px}
+.ev:before{content:"";position:absolute;left:calc(4.2rem + .85rem - 7px + 1px);top:9px;width:13px;height:13px;border-radius:50%;background:var(--surface);border:3px solid var(--sea);z-index:1}
+.ev.key:before{border-color:var(--buoy);background:var(--buoy)}
+.time{justify-self:end;font-weight:700;font-variant-numeric:tabular-nums;background:var(--time-bg);color:var(--time-text);border-radius:6px;padding:2px 8px;height:fit-content;font-size:.95rem}
+.body{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px 14px;box-shadow:var(--shadow)}
+.body h3{margin:0 0 4px;font-size:1.05rem}
+.body p{margin:0 0 8px;color:var(--muted);font-size:.93rem}
+.meta{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.tag{background:var(--tag-bg);color:var(--tag-text);border-radius:99px;padding:2px 10px;font-size:.82rem;font-weight:600}
+.warn{background:var(--warn-bg);color:var(--warn-text);border-radius:6px;padding:6px 10px;font-size:.88rem;margin:0 0 8px}
+.maplink{font-size:.88rem;font-weight:600}
+.alt{border-style:dashed}
+.pic{display:block;margin:-12px -14px 10px;border-radius:10px 10px 0 0;overflow:hidden;background:var(--surface2)}
+.pic img{display:block;width:100%;height:200px;object-fit:cover}
+.pic.full img{height:auto;object-fit:contain}.info{border-left:3px solid var(--sea);padding-left:10px}
+.time-change{background:var(--buoy);border-color:var(--buoy);color:var(--buoy-ink)}
+.time-change p{color:inherit}
+/* przyciski */
+.go{display:inline-block;background:var(--buoy);color:var(--buoy-ink);font-weight:700;font-size:.88rem;text-decoration:none;padding:5px 14px;border-radius:99px}
+.go:hover{filter:brightness(1.08)}
+.go.sec{background:transparent;color:var(--buoy);border:2px solid var(--buoy);padding:3px 12px}
+.btn{display:inline-block;background:var(--buoy);color:var(--buoy-ink);font-weight:700;text-decoration:none;padding:12px 20px;border-radius:8px;margin-top:12px}
+.btn:hover{filter:brightness(1.08)}
+.btn:focus-visible,.go:focus-visible,a:focus-visible{outline:3px solid var(--sea);outline-offset:2px}
+.legend{font-size:.9rem;color:var(--muted);margin:0}
+/* tabela */
+.tablewrap{overflow-x:auto;background:var(--surface);border:1px solid var(--line);border-radius:10px}
+table{border-collapse:collapse;width:100%;font-size:.9rem}
+th,td{padding:8px 10px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+th{background:var(--surface2);font-size:.78rem;text-transform:uppercase;letter-spacing:.05em;color:var(--muted)}
+tr:last-child td{border-bottom:0}
+td.num{white-space:nowrap;font-variant-numeric:tabular-nums}
+tfoot td{font-weight:700;background:var(--surface2)}
+.approx{color:var(--muted);font-size:.85rem;margin:8px 2px 0}
+.note{background:var(--surface);border-left:5px solid var(--buoy);padding:12px 16px;border-radius:6px;font-size:.93rem}
+footer{padding:20px 0 40px;color:var(--muted);font-size:.85rem}
+@media (max-width:980px){
+  .cards{grid-template-columns:repeat(2,1fr)}
+  .layout{grid-template-columns:1fr}
+  .side{position:static}
+}
+@media (max-width:520px){
+  .cards{grid-template-columns:1fr}
+  .timeline:before{left:4.1rem}
+  .ev{grid-template-columns:3.3rem 1fr;gap:0 1.3rem}
+  .ev:before{left:calc(3.3rem + .65rem - 6px + 1px)}
+}
+.tabs{background:var(--surface);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:5}
+.tabs .wrap{display:flex;gap:6px;overflow-x:auto}
+.tab{font:inherit;font-weight:700;background:none;border:0;border-bottom:4px solid transparent;color:var(--muted);padding:12px 14px;cursor:pointer;white-space:nowrap}
+.tab[aria-selected="true"]{color:var(--text);border-bottom-color:var(--buoy)}
+.tab:focus-visible{outline:3px solid var(--sea);outline-offset:-3px}
+.tabpanel[hidden]{display:none}
+.tabpanel{padding-top:8px}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <h1>Gdynia i Karlskrona</h1>
+    <p><span class="route">Warszawa → Gdynia → Karlskrona → Gdynia</span> · 25–27 października 2026, prom Stena Line</p>
+  </div>
+</header>
+<nav class="tabs" aria-label="Dni wyjazdu"><div class="wrap" role="tablist">
+  <button id="btn-gdynia" role="tab" aria-selected="true" aria-controls="tab-gdynia" class="tab">Gdynia, niedziela 25.10</button>
+  <button id="btn-karlskrona" role="tab" aria-selected="false" aria-controls="tab-karlskrona" class="tab">Karlskrona, poniedziałek 26.10</button>
+</div></nav>
+
+<main class="wrap">
+<div id="tab-gdynia" class="tabpanel" role="tabpanel" aria-labelledby="btn-gdynia">
+  <div class="layout">
+    <section aria-labelledby="plan" style="margin-top:0">
+      <h2 id="plan">Plan dnia</h2>
+      <a class="btn" style="margin:10px 0 22px" href="https://www.google.com/maps/dir/?api=1&origin=54.5334924,18.545853&destination=54.5334924,18.545853&waypoints=54.51649083178556,18.543486220342594%7C54.5195657,18.5509422%7C54.5184362,18.5578212&travelmode=walking" target="_blank" rel="noopener">Cała trasa w Google Maps</a>
+      <ol class="timeline">
+        <li class="ev key">
+          <span class="time">noc</span>
+          <div class="body time-change"><h3>Zmiana czasu na zimowy</h3>
+            <p>W nocy 24/25.10 cofamy zegarki o godzinę. Wszystkie godziny poniżej są już w czasie zimowym. Zachód słońca w Gdyni ok. 16:15.</p></div>
+        </li>
+        <li class="ev">
+          <span class="time">10:00</span>
+          <div class="body"><h3>Wyjazd z Warszawy</h3><p>Trasa S7, ok. 4–4,5 h jazdy.</p></div>
+        </li>
+        <li class="ev key">
+          <span class="time">14:30</span>
+          <div class="body"><a class="pic full" href="https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=54.5334924,18.545853" target="_blank" rel="noopener"><img src="img/parking.png" alt="Parking publiczny pod Terminalem Promowym w Gdyni, w tle budynek terminalu" loading="lazy" onerror="this.parentNode.style.display='none'"></a>
+            <h3>Parking pod terminalem</h3>            <p>Publiczny Terminal Promowy, ul. Polska 4. Bagaż na prom zostaje w aucie.</p>            <div class="meta"><span class="tag">0 zł</span><a class="go" href="https://www.google.com/maps/dir/?api=1&destination=54.5334924,18.545853&travelmode=driving" target="_blank" rel="noopener">Prowadź</a><a class="maplink" href="https://maps.google.com/?cid=10090079262436513579" target="_blank" rel="noopener">Google Maps</a><a class="maplink" href="https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=54.5334924,18.545853" target="_blank" rel="noopener">Street View</a></div></div>
+        </li>
+        
+        <li class="ev">
+          <span class="time">15:00</span>
+          <div class="body"><a class="pic" href="https://commons.wikimedia.org/wiki/File:Kamienna_G%C3%B3ra%2C_Gdynia%2C_Poland_-_panoramio.jpg" target="_blank" rel="noopener"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Kamienna_G%C3%B3ra%2C_Gdynia%2C_Poland_-_panoramio.jpg?width=640" alt="Kamienna Góra w Gdyni" loading="lazy" onerror="this.parentNode.style.display='none'"></a>
+            <h3>Kamienna Góra</h3>
+            <p>Kolejka na punkt widokowy, ok. 40 min. Z parkingu ok. 1,5–2 km, ok. 25 min pieszo. Autobusy 133 i 119 (przystanek Dworzec Morski – Muzeum Emigracji) z/do Gdynia Główna, taksówka 10–15 min.</p>
+            <div class="meta"><span class="tag">0 zł</span><a class="go" href="https://www.google.com/maps/dir/?api=1&destination=54.51649083178556,18.543486220342594&travelmode=walking" target="_blank" rel="noopener">Prowadź</a><a class="maplink" href="https://maps.google.com/?cid=10785439770031836659" target="_blank" rel="noopener">Google Maps</a></div></div>
+        </li>
+        <li class="ev key">
+          <span class="time">15:45</span>
+          <div class="body">
+            <a class="pic" href="https://commons.wikimedia.org/wiki/File:Akwarium_Gdy%C5%84skie_2025.jpg" target="_blank" rel="noopener"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Akwarium_Gdy%C5%84skie_2025.jpg?width=640" alt="Budynek Akwarium Gdyńskiego" loading="lazy" onerror="this.parentNode.style.display='none'"></a>
+            <h3>Akwarium Gdyńskie</h3>
+            <p>Z Kamiennej Góry kilka minut spacerem wzdłuż nabrzeża. Po drodze miniesz ORP Błyskawicę, wystarczy obejrzeć ją z zewnątrz (bez wchodzenia).</p>
+            <p class="warn">Czynne do 17:00. Priorytet dnia: zaplanowane ok. 1 h 15 min, do zamknięcia o 17:00. Dojdź na kolację ok. 17:30.</p>
+            <div class="meta"><span class="tag">43 zł / ulg. 30 zł</span><a class="go" href="https://www.google.com/maps/dir/?api=1&destination=54.5184362,18.5578212&travelmode=walking" target="_blank" rel="noopener">Prowadź</a><a class="maplink" href="https://www.google.com/maps/search/?api=1&query=Akwarium+Gdy%C5%84skie+Gdynia" target="_blank" rel="noopener">Google Maps</a></div></div>
+        </li>
+        
+        
+        
+        
+        <li class="ev">
+          <span class="time">17:30</span>
+          <div class="body"><h3>Kolacja: Pierogarnia Mandu</h3>
+            <p>Pierogarnia Mandu, Gdynia Śródmieście.</p>
+            <p class="warn">Godziny z katalogu: 12:00–21:00 (pt, sob do 22:00). Przed wyjściem sprawdź w Google Maps, czy w niedzielę 25.10 jest otwarte i jakie są ceny.</p>
+            <div class="meta"><a class="go" href="https://www.google.com/maps/dir/?api=1&destination=Pierogarnia+Mandu+Gdynia+%C5%9Ar%C3%B3dmie%C5%9Bcie&travelmode=walking" target="_blank" rel="noopener">Prowadź</a><a class="maplink" href="https://www.google.com/maps/search/?api=1&query=Pierogarnia+Mandu+Gdynia+%C5%9Ar%C3%B3dmie%C5%9Bcie" target="_blank" rel="noopener">Google Maps</a></div></div>
+        </li>
+        <li class="ev key">
+          <span class="time">19:30</span>
+          <div class="body"><h3>Powrót pod terminal</h3>
+            <p>Pieszo ok. 30 min, autobusem 133 lub 119 albo taksówką. Zabierz bagaż z auta.</p>
+            <div class="meta"><a class="go" href="https://www.google.com/maps/dir/?api=1&destination=54.5334924,18.545853&travelmode=walking" target="_blank" rel="noopener">Prowadź</a></div></div>
+        </li>
+        <li class="ev">
+          <span class="time">20:15</span>
+          <div class="body"><h3>Odprawa</h3>
+            <p>Kasy Stena Line otwierają się o 20:00. Na pokład wpuszczają niecałą godzinę przed rejsem. W terminalu tylko automaty z kawą.</p>
+            <div class="meta"><a class="go" href="https://www.google.com/maps/dir/?api=1&destination=54.5334924,18.545853&travelmode=walking" target="_blank" rel="noopener">Prowadź</a></div></div>
+        </li>
+        <li class="ev key">
+          <span class="time">22:00</span>
+          <div class="body"><a class="pic" href="https://commons.wikimedia.org/wiki/File:Gdynia_port_IMG_7233_Prom_Stena_Line.jpg" target="_blank" rel="noopener"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Gdynia_port_IMG_7233_Prom_Stena_Line.jpg?width=640" alt="Prom Stena Line w porcie w Gdyni" loading="lazy" onerror="this.parentNode.style.display='none'"></a>
+            <h3>Wypłynięcie do Karlskrony</h3>
+            <p>Prom Stena Spirit, przypłynięcie do Karlskrony w poniedziałek 26.10 o 08:30. Powrót: Stena Ebba z Karlskrony 26.10 o 20:00, w Gdyni we wtorek 27.10 o 06:00.</p></div>
+        </li>
+        <li class="ev">
+          <span class="time">alt.</span>
+          <div class="body alt"><a class="pic" href="https://commons.wikimedia.org/wiki/File:Gdynia_Muzeum_Emigracji_04.jpg" target="_blank" rel="noopener"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Gdynia_Muzeum_Emigracji_04.jpg?width=640" alt="Muzeum Emigracji w Gdyni" loading="lazy" onerror="this.parentNode.style.display='none'"></a>
+            <h3>Alternatywa: Muzeum Emigracji</h3>
+            <p class="warn">W niedzielę czynne 10–18, ostatnie wejście 17:00. Tuż przy terminalu (ul. Polska 1). Jeśli zamiast statków, to od razu po zaparkowaniu.</p>
+            <div class="meta"><span class="tag">ok. 20 zł / ulg. ok. 10 zł</span><a class="go" href="https://www.google.com/maps/dir/?api=1&destination=54.533039,18.5479922&travelmode=walking" target="_blank" rel="noopener">Prowadź</a></div></div>
+        </li>
+      </ol>
+    </section>
+
+    </div>
+
+  <section>
+    <div class="note">
+      <strong>Uwaga:</strong> godziny otwarcia poza sezonem mogą się zmienić. ORP Błyskawica bywa zamykana na uroczystości Marynarki Wojennej, więc przed wyjazdem sprawdź aktualne informacje na stronach obiektów.
+    </div>
+  </section>
+</div>
+<div id="tab-karlskrona" class="tabpanel" role="tabpanel" aria-labelledby="btn-karlskrona" hidden>
+  <div class="layout">
+    <section aria-labelledby="plan-k" style="margin-top:0">
+      <h2 id="plan-k">Plan dnia: poniedziałek 26 października</h2>
+      <p class="legend">Prom Stena Spirit przypływa o 08:30, a Stena Ebba wypływa o 20:00. Pogoda ma być słaba, więc plan stawia na wnętrza. Szwecja ma ten sam czas co Polska.</p>
+      <ol class="timeline" style="margin-top:20px">
+        <li class="ev key">
+          <span class="time">08:30</span>
+          <div class="body"><h3>Przypłynięcie do Karlskrony</h3>
+            <p>Terminal Stena Line jest na wyspie Verkö, ok. 10 km od centrum. Działa pon–śr 06:00–22:00, ma poczekalnię, wi-fi, automaty i przechowalnię bagażu (sprawdź na miejscu, czy jest czynna).</p></div>
+        </li>
+        <li class="ev">
+          <span class="time">09:15</span>
+          <div class="body"><h3>Dojazd do centrum</h3>
+            <p><strong>Autobus nr 6</strong> z przystanku przy terminalu do Karlskrona Centrum, ok. 30 min (dworzec autobusowy jest naprzeciwko dworca kolejowego, obok McDonald's). Relacje podróżnych mówią, że po zejściu z promu cały transfer może zająć nawet godzinę. <strong>Taksówka:</strong> ok. 10 min, ok. 200–300 SEK.</p>
+            <p class="info"><strong>Bilet:</strong> kup w aplikacji Blekingetrafiken bilet 24-godzinny (64 SEK od osoby, "cała doba w cenie dwóch biletów jednorazowych", ważny na przesiadki między liniami autobusowymi; oficjalna strona nie podaje wprost, czy liczba przejazdów jest nieograniczona, ani kiedy zaczyna się doba, więc sprawdź to w aplikacji przy zakupie), najlepiej jeszcze na promie lub w terminalu, gdzie jest wi-fi. Zakup w aplikacji został sprawdzony. Bilet jednorazowy kosztuje 32 SEK i jest ważny 60 min. Plan B: automat biletowy w terminalu Verkö (płatność kartą).</p>
+            <div class="meta"><span class="tag">64 SEK / os. (24 h)</span><a class="go" href="https://www.google.com/maps/dir/?api=1&destination=Karlskrona+Centrum&travelmode=transit" target="_blank" rel="noopener">Prowadź</a></div></div>
+        </li>
+        
+        <li class="ev">
+          <span class="time">12:30</span>
+          <div class="body"><h3>Obiad: street food</h3>
+            <p>Kilka miejsc w centrum do wyboru. Godzin w poniedziałek nie sprawdzałem, a oceny z różnych portali mocno się różnią.</p>
+            <div class="meta"><a class="go" href="https://www.google.com/maps/dir/?api=1&destination=Kebab+House+Borgm%C3%A4staregatan+12+Karlskrona&travelmode=walking" target="_blank" rel="noopener">Kebabhouse</a><a class="go" href="https://www.google.com/maps/dir/?api=1&destination=Michels+Mat+%26+S%C3%A5nt+Ronnebygatan+30+Karlskrona&travelmode=walking" target="_blank" rel="noopener">Michel's Mat &amp; Sånt</a><a class="go" href="https://www.google.com/maps/dir/?api=1&destination=McDonald%27s+Ronnebygatan+46+Karlskrona&travelmode=walking" target="_blank" rel="noopener">McDonald's Kronan</a></div>
+            <p style="margin:8px 0 0;font-size:.85rem">Kebabhouse: Borgmästaregatan 12B (kebab i pizza). Michel's Mat &amp; Sånt: Ronnebygatan 30 (kebab, gyros). McDonald's: Ronnebygatan 46 (centralny, nie ten przy Vedebygatan, 5–6 km od centrum).</p></div>
+        </li>
+        <li class="ev">
+          <span class="time">13:45</span>
+          <div class="body"><h3>Blekinge museum (pod dachem)</h3>
+            <p class="warn">Według jednej listy zamknięte w poniedziałki (wt–nd 10:00–16:00), ale nie potwierdziłem tego na oficjalnej stronie. Sprawdź na blekingemuseum.se lub zadzwoń: +46 455-30 49 85. Jeśli zamknięte, zamiast tego zakupy lub spacer.</p>
+            <div class="meta"><a class="go" href="https://www.google.com/maps/dir/?api=1&destination=Blekinge+museum+Karlskrona&travelmode=walking" target="_blank" rel="noopener">Prowadź</a></div></div>
+        </li>
+        <li class="ev">
+          <span class="time">15:15</span>
+          <div class="body"><h3>Zakupy w supermarkecie</h3>
+            <p>Poniedziałek to zwykły dzień handlowy. <strong>ICA Supermarket Cityhallen</strong>, Arklimästaregatan 40, w centrum, ok. 07:00–23:00 (źródła podają trochę różne godziny). <strong>Willys</strong>, Tullgatan 1, ok. 08:00–21:00 według jednego katalogu.</p>
+            <div class="meta"><a class="go" href="https://www.google.com/maps/dir/?api=1&destination=ICA+Supermarket+Cityhallen+Arklim%C3%A4staregatan+40+Karlskrona&travelmode=walking" target="_blank" rel="noopener">ICA Cityhallen</a><a class="go" href="https://www.google.com/maps/dir/?api=1&destination=Willys+Tullgatan+1+Karlskrona&travelmode=walking" target="_blank" rel="noopener">Willys</a></div></div>
+        </li>
+        <li class="ev">
+          <span class="time">16:15</span>
+          <div class="body"><h3>Stortorget i stare miasto (opcjonalnie)</h3>
+            <p>Tylko jeśli pogoda pozwoli. Centralny plac z kościołami Fredrikskyrkan i Amiralitetskyrkan, miasto jest na liście UNESCO. Godzin otwarcia kościołów nie sprawdzałem.</p>
+            <div class="meta"><span class="tag">0 zł</span><a class="go" href="https://www.google.com/maps/dir/?api=1&destination=Stortorget+Karlskrona&travelmode=walking" target="_blank" rel="noopener">Prowadź</a></div></div>
+        </li>
+        <li class="ev key">
+          <span class="time">17:30</span>
+          <div class="body"><h3>Powrót na terminal</h3>
+            <p>Autobus nr 6 z dworca autobusowego do ostatniego przystanku przy terminalu Verkö, ok. 30 min. Sprawdź rozkład w aplikacji, bo jedzie rzadko. Taksówka ok. 10 min i 200–300 SEK, jako plan awaryjny.</p>
+            <p class="warn">Godzina zamknięcia odprawy nie jest podana na stronie portu. Sprawdź ją w bilecie lub u Stena Line.</p>
+            <div class="meta"><a class="go" href="https://www.google.com/maps/dir/?api=1&destination=Karlskrona+F%C3%A4rjeterminal+Verk%C3%B6&travelmode=transit" target="_blank" rel="noopener">Prowadź</a></div></div>
+        </li>
+        <li class="ev key">
+          <span class="time">20:00</span>
+          <div class="body"><h3>Wypłynięcie do Gdyni</h3>
+            <p>Prom Stena Ebba. Przypłynięcie do Gdyni we wtorek 27.10 o 06:00.</p></div>
+        </li>
+      </ol>
+    </section>
+  </div>
+
+  <section>
+    <div class="note">
+      <strong>Płatności:</strong> Szwecja jest niemal bezgotówkowa. Potrzebna jest karta Visa lub Mastercard z chipem i PIN-em (karty z paskiem magnetycznym bywają nieobsługiwane). Płać w koronach (SEK) i nie zgadzaj się na przeliczanie na złotówki w terminalu, bo kurs bywa gorszy. Terminal Stena Line przyjmuje kartę lub gotówkę, ale tylko w SEK. Źródła o płatnościach są z lat 2018–2023, więc to ogólna wskazówka, a nie potwierdzenie na 2026 r.
+    </div>
+  </section>
+  <section>
+    <div class="note">
+      <strong>Uwaga:</strong> dane terminalu pochodzą ze strony Stena Line, a ceny biletów komunikacji z Blekingetrafiken. Godziny muzeum Blekinge, sklepów i barów pochodzą z katalogów i mogą być nieaktualne. Przed wyjazdem sprawdź je w Google Maps.
+    </div>
+  </section>
+</div>
+
+</main>
+
+<footer><div class="wrap">Zdjęcia: Wikimedia Commons (kliknij zdjęcie, by zobaczyć autora i licencję), parking: Google Street View. Strona statyczna, bez kluczy API. Nawigację i mapy obsługuje Google Maps.</div></footer>
+<script>
+(function(){
+  var tabs=[].slice.call(document.querySelectorAll(".tab"));
+  function show(id){
+    tabs.forEach(function(b){
+      var on=b.getAttribute("aria-controls")===id;
+      b.setAttribute("aria-selected",on);
+      document.getElementById(b.getAttribute("aria-controls")).hidden=!on;
+    });
+    try{history.replaceState(null,"","#"+id.replace("tab-",""))}catch(e){}
+  }
+  tabs.forEach(function(b){b.addEventListener("click",function(){show(b.getAttribute("aria-controls"));window.scrollTo(0,0)})});
+  show(location.hash==="#karlskrona"?"tab-karlskrona":"tab-gdynia");
+})();
+</script>
+</body>
+</html>
